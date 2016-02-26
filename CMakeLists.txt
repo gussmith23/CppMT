@@ -13,16 +13,17 @@ endif()
 add_definitions ("-Wall")
 
 include_directories(${OpenCV_INCLUDE_DIRS})
+include_directories(opensurf/include/)
 
 if(WIN32)
 add_executable (cmt common.cpp gui.cpp main.cpp
     CMT.cpp Consensus.cpp Fusion.cpp Matcher.cpp Tracker.cpp
-    fastcluster/fastcluster.cpp getopt/getopt.cpp
+    fastcluster/fastcluster.cpp getopt/getopt.cpp opensurf/src/fasthessian.cpp opensurf/src/integral.cpp opensurf/src/ip_interface.cpp opensurf/src/ipoint.cpp opensurf/src/surf.cpp opensurf/src/utils.cpp 
     )
 else()
 add_executable (cmt common.cpp gui.cpp main.cpp
     CMT.cpp Consensus.cpp Fusion.cpp Matcher.cpp Tracker.cpp
-    fastcluster/fastcluster.cpp)
+    fastcluster/fastcluster.cpp opensurf/src/fasthessian.cpp opensurf/src/integral.cpp opensurf/src/ip_interface.cpp opensurf/src/ipoint.cpp opensurf/src/surf.cpp opensurf/src/utils.cpp )
 endif()
 
 target_link_libraries(cmt ${OpenCV_LIBS})
