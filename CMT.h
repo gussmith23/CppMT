@@ -8,6 +8,9 @@
 #include "Matcher.h"
 #include "Tracker.h"
 
+// Wrapper for OpenSURF to make it look like opencv detectors/descriptors
+#include "opensurf_cmt_wrapper.h"
+
 #include <opencv2/features2d/features2d.hpp>
 
 using cv::FeatureDetector;
