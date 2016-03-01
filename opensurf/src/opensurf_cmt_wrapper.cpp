@@ -1,5 +1,6 @@
 #include "opensurf_cmt_wrapper.h"
 
+using namespace cv;
 
 /*
 Detect wraps the following OpenSURF (surflib.h) function call:
