@@ -8,7 +8,9 @@
 #define OPENSURF_CMT_WRAPPER_H
 
 #include "surflib.h"
-#include <opencv.hpp>
+#include <opencv2\opencv.hpp>
+
+using namespace cv;
 
 class SURFWrapper{
 public:
