@@ -41,8 +41,9 @@ public:
     RotatedRect bb_rot;
 
 private:
-    Ptr<FeatureDetector> detector;
-    Ptr<DescriptorExtractor> descriptor;
+	// Note: Gus changed this; using my wrapper for OpenSURF instead of using OpenCV.
+    SURFWrapper *detector;
+    SURFWrapper *descriptor;
 
     Size2f size_initial;
 
