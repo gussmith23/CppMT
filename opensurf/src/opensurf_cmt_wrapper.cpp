@@ -46,8 +46,9 @@ void SURFWrapper::compute(const Mat& image, vector<KeyPoint>& keypoints, Mat& de
 	vector<Ipoint> keypoints_ipoints = vector<Ipoint>();
 
 	// Now we convert each Keypoint to an ipoint, the opposite of what we do above.
-	for each (KeyPoint keypoint in keypoints)
+	for (int i = 0; i < keypoints.size(); i++)
 	{
+		KeyPoint keypoint = keypoints.at(i);
 		Ipoint ipoint = Ipoint();
 
 		ipoint.x = keypoint.pt.x;
@@ -62,12 +63,16 @@ void SURFWrapper::compute(const Mat& image, vector<KeyPoint>& keypoints, Mat& de
 	surfDes(iplImage, keypoints_ipoints);
 
 	// Row i contains the 64 descriptors for keypoint i.
-	descriptors = Mat(0, 64, CV_32F);	// TODO can we initialize with 0 rows and add with push_back below?
+	Mat descriptors_temp = Mat(keypoints.size(), 64, CV_32FC1);	// TODO can we initialize with 0 rows and add with push_back below?
 
-	for each (Ipoint ipoint in keypoints_ipoints)
-	{
+	for (int i = 0; i < keypoints.size(); i++)
+	{	
+		Ipoint ipoint = keypoints_ipoints.at(i);
 		Mat row = Mat(1, 64, CV_32F);
-		memcpy(row.data, ipoint.descriptor, 64 * 32);
-		descriptors.push_back(row);
+		for (int j = 0; j < 64; j++) row.at<float>(0,j) = ipoint.descriptor[j];
+		row.row(0).copyTo(descriptors_temp.row(i));
 	}
+
+	descriptors = Mat(descriptors_temp.size(), CV_8UC1);
+	descriptors_temp.convertTo(descriptors, CV_8U);
 }
