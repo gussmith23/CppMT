@@ -11,7 +11,7 @@ inline void surfDet(IplImage *img,  image to find Ipoints in
                     int init_sample = INIT_SAMPLE,  initial sampling step 
                     float thres = THRES  blob response threshold 
 */
-void SURFWrapper::detect(const Mat& image, vector<KeyPoint>& keypoints, const Mat& mask = Mat())
+void SURFWrapper::detect(const Mat& image, vector<KeyPoint>& keypoints, const Mat& mask)
 {
 	IplImage *iplImage = new IplImage(image);
 	vector<Ipoint> keypoints_ipoints = vector<Ipoint>();
@@ -42,5 +42,32 @@ inline void surfDes(IplImage *img,   image to find Ipoints in
 */
 void SURFWrapper::compute(const Mat& image, vector<KeyPoint>& keypoints, Mat& descriptors)
 {
+	IplImage *iplImage = new IplImage(image);
+	vector<Ipoint> keypoints_ipoints = vector<Ipoint>();
 
+	// Now we convert each Keypoint to an ipoint, the opposite of what we do above.
+	for each (KeyPoint keypoint in keypoints)
+	{
+		Ipoint ipoint = Ipoint();
+
+		ipoint.x = keypoint.pt.x;
+		ipoint.y = keypoint.pt.y;
+		ipoint.orientation = keypoint.angle;
+		ipoint.scale = keypoint.size;
+
+		keypoints_ipoints.push_back(ipoint);
+	}
+
+
+	surfDes(iplImage, keypoints_ipoints);
+
+	// Row i contains the 64 descriptors for keypoint i.
+	descriptors = Mat(0, 64, CV_32F);	// TODO can we initialize with 0 rows and add with push_back below?
+
+	for each (Ipoint ipoint in keypoints_ipoints)
+	{
+		Mat row = Mat(1, 64, CV_32F);
+		memcpy(row.data, ipoint.descriptor, 64 * 32);
+		descriptors.push_back(row);
+	}
 }
