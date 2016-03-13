@@ -31,9 +31,12 @@ void CMT::initialize(const Mat im_gray, const Rect rect)
     vector<KeyPoint> keypoints;
     detector->detectAndCompute(im_gray, keypoints, descs);
 
-    //Divide keypoints into foreground and background keypoints according to selection
+    // Divide keypoints and descriptors into foreground and background depending on
+	//	whether or not they're inside the ROI.
     vector<KeyPoint> keypoints_fg;
     vector<KeyPoint> keypoints_bg;
+	Mat descs_fg;
+	Mat descs_bg;
 
     for (size_t i = 0; i < keypoints.size(); i++)
     {
@@ -43,11 +46,13 @@ void CMT::initialize(const Mat im_gray, const Rect rect)
         if (pt.x > rect.x && pt.y > rect.y && pt.x < rect.br().x && pt.y < rect.br().y)
         {
             keypoints_fg.push_back(k);
+			descs_fg.push_back(descs.row(i));
         }
 
         else
         {
             keypoints_bg.push_back(k);
+			descs_bg.push_back(descs.row(i));
         }
 
     }
@@ -59,12 +64,6 @@ void CMT::initialize(const Mat im_gray, const Rect rect)
     {
         classes_fg.push_back(i);
     }
-
-    //Compute foreground/background features
-    Mat descs_fg;
-    Mat descs_bg;
-    descriptor->compute(im_gray, keypoints_fg, descs_fg);
-    descriptor->compute(im_gray, keypoints_bg, descs_bg);
 
     //Only now is the right time to convert keypoints to points, as compute() might remove some keypoints
     vector<Point2f> points_fg;
