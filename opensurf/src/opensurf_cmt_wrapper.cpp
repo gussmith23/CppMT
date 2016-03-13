@@ -78,3 +78,39 @@ void SURFWrapper::compute(const Mat& image, vector<KeyPoint>& keypoints, Mat& de
 }
 
 void SURFWrapper::detectAndCompute(const Mat& image, vector<KeyPoint>& keypoints, Mat& descriptors, const Mat& mask)
+{
+	IplImage *iplImage = new IplImage(image);
+	vector<Ipoint> keypoints_ipoints = vector<Ipoint>();
+
+	surfDetDes(iplImage, keypoints_ipoints);
+
+	// Add keypoints into the return vector (keypoints)
+	for (int i = 0; i < keypoints_ipoints.size(); i++)
+	{
+		KeyPoint keypoint = KeyPoint();
+		Ipoint ipoint = keypoints_ipoints.at(i);
+
+		// Because of how we use the returned vector in CMT.cpp, we only need to return the location.
+		keypoint.pt = Point2f(ipoint.x, ipoint.y);
+		//keypoint.angle = ipoint.orientation;		// TODO may have to shift this here.
+		//keypoint.octave;
+		//keypoint.size = ipoint.scale;				// TODO don't think this is right.
+
+		keypoints.push_back(keypoint);
+	}
+	
+	// Put descriptors in the return Mat.
+	//	(Row i contains the 64 descriptors for keypoint i.)
+	Mat descriptors_temp = Mat(keypoints_ipoints.size(), 64, CV_32FC1);	// TODO can we initialize with 0 rows and add with push_back below?
+	for (int i = 0; i < keypoints_ipoints.size(); i++)
+	{
+		Ipoint ipoint = keypoints_ipoints.at(i);
+		Mat row = Mat(1, 64, CV_32F);
+		for (int j = 0; j < 64; j++) row.at<float>(0, j) = ipoint.descriptor[j];
+		row.row(0).copyTo(descriptors_temp.row(i));
+	}
+
+	descriptors = Mat(descriptors_temp.size(), CV_8UC1);
+	descriptors_temp.convertTo(descriptors, CV_8U);
+
+}
