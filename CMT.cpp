@@ -128,12 +128,10 @@ void CMT::processFrame(Mat im_gray) {
 
     //Detect keypoints, compute descriptors
     vector<KeyPoint> keypoints;
-    detector->detect(im_gray, keypoints);
+    Mat descriptors;
+    detector->detectAndCompute(im_gray, keypoints, descriptors);
 
     FILE_LOG(logDEBUG) << keypoints.size() << " keypoints found.";
-
-    Mat descriptors;
-    descriptor->compute(im_gray, keypoints, descriptors);
 
     //Match keypoints globally
     vector<Point2f> points_matched_global;
