@@ -90,11 +90,10 @@ void SURFWrapper::detectAndCompute(const Mat& image, vector<KeyPoint>& keypoints
 		KeyPoint keypoint = KeyPoint();
 		Ipoint ipoint = keypoints_ipoints.at(i);
 
-		// Because of how we use the returned vector in CMT.cpp, we only need to return the location.
 		keypoint.pt = Point2f(ipoint.x, ipoint.y);
-		//keypoint.angle = ipoint.orientation;		// TODO may have to shift this here.
-		//keypoint.octave;
-		//keypoint.size = ipoint.scale;				// TODO don't think this is right.
+		keypoint.angle = ipoint.orientation;		// TODO may have to shift this here.
+		keypoint.octave = ipoint.clusterIndex;		// TODO ...
+		keypoint.size = ipoint.scale;				// TODO don't think this is right.
 
 		keypoints.push_back(keypoint);
 	}
