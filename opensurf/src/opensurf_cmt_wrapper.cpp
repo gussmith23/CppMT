@@ -82,7 +82,7 @@ void SURFWrapper::detectAndCompute(const Mat& image, vector<KeyPoint>& keypoints
 	IplImage *iplImage = new IplImage(image);
 	vector<Ipoint> keypoints_ipoints = vector<Ipoint>();
 
-	surfDetDes(iplImage, keypoints_ipoints);
+	surfDetDes(iplImage, keypoints_ipoints, false, OCTAVES, INTERVALS, INIT_SAMPLE, THRES);
 
 	// Add keypoints into the return vector (keypoints)
 	for (int i = 0; i < keypoints_ipoints.size(); i++)
