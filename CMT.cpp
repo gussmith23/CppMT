@@ -27,8 +27,9 @@ void CMT::initialize(const Mat im_gray, const Rect rect)
 	descriptor = detector;
 
     //Get initial keypoints in whole image and compute their descriptors
+	Mat descs;
     vector<KeyPoint> keypoints;
-    detector->detect(im_gray, keypoints);
+    detector->detectAndCompute(im_gray, keypoints, descs);
 
     //Divide keypoints into foreground and background keypoints according to selection
     vector<KeyPoint> keypoints_fg;
