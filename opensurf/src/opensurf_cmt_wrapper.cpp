@@ -76,3 +76,5 @@ void SURFWrapper::compute(const Mat& image, vector<KeyPoint>& keypoints, Mat& de
 	descriptors = Mat(descriptors_temp.size(), CV_8UC1);
 	descriptors_temp.convertTo(descriptors, CV_8U);
 }
+
+void SURFWrapper::detectAndCompute(const Mat& image, vector<KeyPoint>& keypoints, Mat& descriptors, const Mat& mask)
